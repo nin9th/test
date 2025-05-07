@@ -73,7 +73,7 @@ st.markdown("""
     }
 
     .stInfo {
-        background-color: #fff66633 !important;
+        background-color: #fff666 !important;
         border-left: 4px solid #fff666 !important;
     }
 
@@ -126,10 +126,10 @@ with st.expander("📝 How to use this app"):
 
 ### 📋 Format:
 Each translation entry must look like this:
-1/n
-Source/n
-Context/n
-Translation/n
+1
+Source
+Context
+Translation
 Repeat for multiple entries.
 
 ### ✅ Steps:
