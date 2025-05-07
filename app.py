@@ -23,8 +23,20 @@ def parse_entries(text):
             i += 1
     return entries
 
-# Function to generate download files
-def generate_files(entries, generate_txt, generate_docx):
+# Function to generate and download files
+def save_outputs(text, generate_txt, generate_docx):
+    entries = parse_entries(text)
+    if not entries:
+        st.error("No valid entries found in the text.")
+        return
+
+    if not (generate_txt or generate_docx):
+        st.warning("No output file types selected.")
+        return
+
+    files_generated = []
+
+    # Generate tab-delimited text file
     if generate_txt:
         output = io.StringIO()
         output.write("Source\tTranslation\tContext\n")
@@ -35,10 +47,11 @@ def generate_files(entries, generate_txt, generate_docx):
             label="⬇ Download Tab-Delimited .txt",
             data=txt_data,
             file_name="output_tab_delimited.txt",
-            mime="text/plain",
-            key="download_txt"
+            mime="text/plain"
         )
+        files_generated.append("Tab-delimited .txt")
 
+    # Generate DOCX file
     if generate_docx:
         doc = Document()
         for _, trans, _ in entries:
@@ -50,12 +63,15 @@ def generate_files(entries, generate_txt, generate_docx):
             label="⬇ Download .docx",
             data=doc_io,
             file_name="translations.docx",
-            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            key="download_docx"
+            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         )
+        files_generated.append(".docx")
+
+    if files_generated:
+        st.success(f"Files generated: {', '.join(files_generated)}")
 
 # Streamlit app layout
-st.title("Moon Prism Power, Paste and Go! 🌙")
+st.title("🌙 Moon Prism Power, Paste and Go!")
 
 # Help section
 with st.expander("How to use this app"):
@@ -102,11 +118,11 @@ generate_txt = col1.checkbox("Generate Tab-Delimited .txt", value=True)
 generate_docx = col2.checkbox("Generate .docx", value=False)
 
 # File generation section
-st.subheader("Step 3: Download Files")
+st.subheader("Step 3: Generate and Download Files")
 if text_input.strip():
     entries = parse_entries(text_input)
     if entries:
-        generate_files(entries, generate_txt, generate_docx)
+        save_outputs(text_input, generate_txt, generate_docx)
     else:
         st.info("Please enter valid input above to enable downloads.")
 else:
