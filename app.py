@@ -4,7 +4,7 @@ import os
 import io
 import pandas as pd
 
-# Function to parse entries from text input (same as original)
+# Function to parse entries from text input
 def parse_entries(text):
     lines = [line.strip() for line in text.strip().splitlines()]
     entries = []
@@ -25,15 +25,15 @@ def parse_entries(text):
             i += 1
     return entries
 
-# Function to copy translations to clipboard
-def copy_translations(text):
+# Function to extract and display translations
+def extract_translations(text):
     entries = parse_entries(text)
     if not entries:
-        st.error("No valid translations found to copy.")
+        st.error("No valid translations found.")
         return
     translations = "\n".join(trans for _, trans, _ in entries)
-    st.session_state['clipboard'] = translations
-    st.success("Translations copied to clipboard!")
+    st.session_state['extracted'] = translations
+    st.success("Translations extracted!")
 
 # Function to generate and download files
 def save_outputs(text, generate_txt, generate_docx):
@@ -56,7 +56,7 @@ def save_outputs(text, generate_txt, generate_docx):
             output.write(f"{src}\t{trans}\t{ctx}\n")
         txt_data = output.getvalue().encode('utf-8')
         st.download_button(
-            label="Download Tab-Delimited .txt",
+            label="⬇ Download Tab-Delimited .txt",
             data=txt_data,
             file_name="output_tab_delimited.txt",
             mime="text/plain"
@@ -72,7 +72,7 @@ def save_outputs(text, generate_txt, generate_docx):
         doc.save(doc_io)
         doc_io.seek(0)
         st.download_button(
-            label="Download .docx",
+            label="⬇ Download .docx",
             data=doc_io,
             file_name="translations.docx",
             mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -85,7 +85,7 @@ def save_outputs(text, generate_txt, generate_docx):
 # Streamlit app layout
 st.title("Moon Prism Power, Paste and Go! 🌙")
 
-# Help text (replacing tooltip)
+# Help section
 with st.expander("How to use this app"):
     st.markdown("""
     Paste the text copied from Translation Task Manager (TTM).  
@@ -98,27 +98,28 @@ with st.expander("How to use this app"):
     ```
     """)
 
-# Text input area
-st.subheader("Paste your input text below:")
+# Input text
+st.subheader("Step 1: Paste your input text below")
 text_input = st.text_area("", height=400, placeholder="Paste your text here...")
 
-# Copy translations button
-if st.button("📋 Copy translations to clipboard"):
-    copy_translations(text_input)
+# Extract button
+st.subheader("Step 2: Extract Translations")
+if st.button("🧾 Extract Translations from Input"):
+    extract_translations(text_input)
 
-# Output options
-st.subheader("Output options")
+# Display extracted translations
+if 'extracted' in st.session_state:
+    st.text_area("Extracted Translations (for manual copy):", 
+                 value=st.session_state['extracted'], 
+                 height=100, 
+                 key="extracted_display")
+
+# Output file options
+st.subheader("Step 3: Choose Output Format")
 col1, col2 = st.columns(2)
 generate_txt = col1.checkbox("Generate Tab-Delimited .txt", value=True)
 generate_docx = col2.checkbox("Generate .docx", value=False)
 
-# Save outputs button
-if st.button("Save Outputs"):
+# Save button
+if st.button("💾 Generate and Download Files"):
     save_outputs(text_input, generate_txt, generate_docx)
-
-# Clipboard copy workaround for Streamlit (display copied text)
-if 'clipboard' in st.session_state:
-    st.text_area("Copied Translations (for manual copy if needed):", 
-                 value=st.session_state['clipboard'], 
-                 height=100, 
-                 key="clipboard_display")
