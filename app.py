@@ -5,6 +5,7 @@ import io
 # 🎨 --- Custom CSS Styling ---
 st.markdown("""
     <style>
+    
     html, body, .stApp {
         background-color: #fffafc;
         color: #2c2c2c;
@@ -82,7 +83,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h1 style='color:#ff2e51;'>🌙 Moon Prism Power, Paste and Go!</h1>", unsafe_allow_html=True)
 
 
 # 📄 --- Parse Logic ---
@@ -126,10 +126,10 @@ with st.expander("📝 How to use this app"):
 
 ### 📋 Format:
 Each translation entry must look like this:
-1
-Source
-Context
-Translation
+1/n
+Source/n
+Context/n
+Translation/n
 Repeat for multiple entries.
 
 ### ✅ Steps:
