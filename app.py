@@ -71,7 +71,7 @@ def save_outputs(text, generate_txt, generate_docx):
         st.success(f"Files generated: {', '.join(files_generated)}")
 
 # Streamlit app layout
-st.title("🌙 Moon Prism Power, Paste and Go!")
+st.title("Moon Prism Power, Paste and Go! 🌙")
 
 # Help section
 with st.expander("How to use this app"):
@@ -91,9 +91,11 @@ st.subheader("Step 1: Paste your input text below")
 
 col_input, col_clear = st.columns([4, 1])
 with col_input:
+    # Handle session state for input text using key
     text_input = st.text_area("", height=400, placeholder="Paste your text here...", key="input_text")
 with col_clear:
     if st.button("🧹 Clear"):
+        # Clear the session state value for input_text, which will clear the text area
         st.session_state["input_text"] = ""
 
 # Real-time extraction with auto-clear
