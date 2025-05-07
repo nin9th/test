@@ -44,10 +44,10 @@ with st.expander("🛈 How to use this app"):
 
 ### ✂️ Input Format:
 Each translation entry must follow this format:
-1
-Source sentence
-Context sentence
-Translated sentence
+- 1
+- Source sentence
+- Context sentence
+- Translated sentence
 
 Repeat this pattern for multiple entries.
 
