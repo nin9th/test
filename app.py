@@ -73,7 +73,7 @@ st.markdown("""
     }
 
     .stInfo {
-        background-color: #fff666 !important;
+        background-color: #000000 !important;
         border-left: 4px solid #fff666 !important;
     }
 
