@@ -8,10 +8,12 @@ st.markdown("""
     html, body, .stApp {
         background-color: #fffafc;
         color: #2c2c2c;
+        font-family: 'Comic Sans MS', 'Trebuchet MS', sans-serif;
     }
 
     h1, h2, h3, h4, h5 {
         color: #ff2e51;
+        font-weight: 700;
     }
 
     .stMarkdown h3, .stSubheader {
@@ -24,6 +26,12 @@ st.markdown("""
         background-color: #fffaff !important;
         border-radius: 10px;
         color: #2c2c2c !important;
+        font-size: 1.1rem;
+    }
+
+    .stTextArea textarea::placeholder {
+        color: #8888aa;
+        font-style: italic;
     }
 
     .stDownloadButton button {
@@ -31,13 +39,22 @@ st.markdown("""
         color: white !important;
         border: none;
         border-radius: 8px;
-        padding: 0.5rem 1.2rem;
+        padding: 0.6rem 1.5rem;
         margin-top: 0.5rem;
-        font-weight: 600;
+        font-weight: bold;
+        font-size: 1rem;
     }
 
     .stDownloadButton button:hover {
         background-color: #d260ff !important;
+        transform: scale(1.03);
+        transition: all 0.2s ease-in-out;
+    }
+
+    .stDownloadButton button:disabled {
+        background-color: #ffd0d7 !important;
+        color: #ffffffaa !important;
+        border: 1px dashed #ffb3df !important;
     }
 
     .stExpander {
@@ -50,17 +67,17 @@ st.markdown("""
         color: #2c2c2c !important;
     }
 
-    .stTextInput input {
-        color: #2c2c2c !important;
-    }
-
     .stCaption {
         color: #5a5a5a;
     }
 
     .stInfo {
-        background-color: #fff66622 !important;
+        background-color: #fff66633 !important;
         border-left: 4px solid #fff666 !important;
+    }
+
+    .stApp {
+        padding-bottom: 50px;
     }
     </style>
 """, unsafe_allow_html=True)
