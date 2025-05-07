@@ -2,6 +2,8 @@ import streamlit as st
 from docx import Document
 import io
 
+st.markdown("<h1 style='color:#ff2e51;'>🌙 Moon Prism Power, Paste and Go!</h1>", unsafe_allow_html=True)
+
 # Helper function to generate DOCX
 def generate_docx(entries):
     doc = Document()
