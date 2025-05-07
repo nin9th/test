@@ -1,10 +1,40 @@
 import streamlit as st
 from docx import Document
-import os
 import io
-import pandas as pd
 
-# Function to parse entries from text input
+# Page config with bright theme colors
+st.set_page_config(
+    page_title="Moon Prism Power, Paste and Go!",
+    layout="centered",
+    initial_sidebar_state="auto"
+)
+
+# Inject CSS for custom color theme
+st.markdown("""
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+        .stApp {
+            background-color: #ffffff;
+        }
+        h1, h2, h3, .stMarkdown, .stTextInput, .stTextArea, .stButton, .stCheckbox {
+            color: #5158ff;
+        }
+        .css-1cpxqw2, .css-1d391kg {
+            background-color: #fff666 !important;
+            color: #000000 !important;
+            border-radius: 10px;
+            border: 2px solid #d260ff;
+        }
+        .stTextArea textarea {
+            background-color: #fffafc;
+            border: 1px solid #d260ff;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+# Function to parse entries
 def parse_entries(text):
     lines = [line.strip() for line in text.strip().splitlines()]
     entries = []
@@ -25,50 +55,24 @@ def parse_entries(text):
             i += 1
     return entries
 
-# Function to extract and return translations as a string
-def extract_translations(text):
-    entries = parse_entries(text)
+# Save outputs
+def save_outputs(entries, generate_txt, generate_docx):
     if not entries:
-        return ""
-    return "\n".join(trans for _, trans, _ in entries)
-
-# Function to copy translations to clipboard
-def copy_translations(translations):
-    if not translations:
-        st.error("No valid translations found to copy.")
-        return
-    st.session_state['clipboard'] = translations
-    st.success("Translations copied to clipboard!")
-
-# Function to generate and download files
-def save_outputs(text, generate_txt, generate_docx):
-    entries = parse_entries(text)
-    if not entries:
-        st.error("No valid entries found in the text.")
+        st.error("No valid entries found.")
         return
 
     if not (generate_txt or generate_docx):
-        st.warning("No output file types selected.")
+        st.warning("No output format selected.")
         return
 
-    files_generated = []
-
-    # Generate tab-delimited text file
     if generate_txt:
         output = io.StringIO()
         output.write("Source\tTranslation\tContext\n")
         for src, trans, ctx in entries:
             output.write(f"{src}\t{trans}\t{ctx}\n")
         txt_data = output.getvalue().encode('utf-8')
-        st.download_button(
-            label="Download Tab-Delimited .txt",
-            data=txt_data,
-            file_name="output_tab_delimited.txt",
-            mime="text/plain"
-        )
-        files_generated.append("Tab-delimited .txt")
+        st.download_button("⬇ Download Tab-Delimited .txt", txt_data, "output.txt", "text/plain")
 
-    # Generate DOCX file
     if generate_docx:
         doc = Document()
         for _, trans, _ in entries:
@@ -76,62 +80,51 @@ def save_outputs(text, generate_txt, generate_docx):
         doc_io = io.BytesIO()
         doc.save(doc_io)
         doc_io.seek(0)
-        st.download_button(
-            label="Download .docx",
-            data=doc_io,
-            file_name="translations.docx",
-            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        )
-        files_generated.append(".docx")
+        st.download_button("⬇ Download .docx", doc_io, "translations.docx", 
+                           "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
 
-    if files_generated:
-        st.success(f"Files generated: {', '.join(files_generated)}")
+# Layout
+st.title("🌙 Moon Prism Power, Paste and Go!")
 
-# Streamlit app layout
-st.title("Moon Prism Power, Paste and Go! 🌙")
-
-# Help text
-with st.expander("How to use this app"):
+with st.expander("📘 How to use this app"):
     st.markdown("""
-    Paste the text copied from Translation Task Manager (TTM).  
-    Each entry must follow this format:  
-
-    {Segment No.}
-    {Source}
-    {Context}
-    {Translation}
+        Paste the text copied from TTM.  
+        Each entry must follow this format:  
+        ```
+        {Segment No.}
+        {Source}
+        {Context}
+        {Translation}
+        ```
+        Or upload a `.txt` file with the same format.
     """)
 
-# Input and output side by side
-st.subheader("Input and Extracted Translations")
-col1, col2 = st.columns(2)
+# Input
+input_method = st.radio("Choose your input method:", ["Paste text", "Upload file"], horizontal=True)
 
-# Text input area
-with col1:
-    st.markdown("**Paste your input text below:**")
-    text_input = st.text_area("", height=400, placeholder="Paste your text here...", key="input_text")
+text_input = ""
+if input_method == "Paste text":
+    text_input = st.text_area("Paste your text below:", height=300, placeholder="1\nHello\nGreeting\nBonjour\n...")
+else:
+    uploaded_file = st.file_uploader("Upload your text file (.txt)", type=["txt"])
+    if uploaded_file:
+        text_input = uploaded_file.read().decode("utf-8")
 
-# Extracted translations
-with col2:
-    st.markdown("**Extracted Translations:**")
-    translations = extract_translations(text_input)
-    st.text_area("", value=translations, height=400, placeholder="Extracted translations will appear here...", key="extracted_translations", disabled=True)
-    if translations and st.button("📋 Copy translations to clipboard", key="copy_translations"):
-        copy_translations(translations)
+if text_input:
+    entries = parse_entries(text_input)
 
-# Output options
-st.subheader("Output options")
-col3, col4 = st.columns(2)
-generate_txt = col3.checkbox("Generate Tab-Delimited .txt", value=True)
-generate_docx = col4.checkbox("Generate .docx", value=False)
+    if entries:
+        st.subheader("📝 Translations (for copy-paste):")
+        translations_only = "\n".join(trans for _, trans, _ in entries)
+        st.text_area("Translations", value=translations_only, height=200)
 
-# Save outputs button
-if st.button("Save Outputs"):
-    save_outputs(text_input, generate_txt, generate_docx)
+        # Output options
+        st.subheader("💾 Download Options")
+        col1, col2 = st.columns(2)
+        generate_txt = col1.checkbox("Generate Tab-Delimited .txt", value=True)
+        generate_docx = col2.checkbox("Generate .docx", value=False)
 
-# Clipboard copy workaround for Streamlit (display copied text)
-if 'clipboard' in st.session_state:
-    st.text_area("Copied Translations (for manual copy if needed):", 
-                 value=st.session_state['clipboard'], 
-                 height=100, 
-                 key="clipboard_display")
+        if st.button("Generate Downloads"):
+            save_outputs(entries, generate_txt, generate_docx)
+    else:
+        st.warning("No valid entries found.")
