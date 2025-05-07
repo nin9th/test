@@ -7,35 +7,37 @@ st.markdown("""
     <style>
     html, body, .stApp {
         background-color: #fffafc;
+        color: #2c2c2c;
     }
 
-    h1 {
+    h1, h2, h3, h4, h5 {
         color: #ff2e51;
-        font-weight: bold;
     }
 
     .stMarkdown h3, .stSubheader {
         color: #5158ff;
-        margin-top: 1rem;
+        font-weight: 600;
     }
 
     .stTextArea textarea {
         border: 2px solid #d260ff !important;
         background-color: #fffaff !important;
         border-radius: 10px;
+        color: #2c2c2c !important;
     }
 
     .stDownloadButton button {
         background-color: #ff2e51 !important;
         color: white !important;
         border: none;
-        border-radius: 10px;
-        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        padding: 0.5rem 1.2rem;
+        margin-top: 0.5rem;
+        font-weight: 600;
     }
 
     .stDownloadButton button:hover {
         background-color: #d260ff !important;
-        color: white !important;
     }
 
     .stExpander {
@@ -45,9 +47,24 @@ st.markdown("""
 
     .stExpanderHeader {
         font-weight: bold;
+        color: #2c2c2c !important;
+    }
+
+    .stTextInput input {
+        color: #2c2c2c !important;
+    }
+
+    .stCaption {
+        color: #5a5a5a;
+    }
+
+    .stInfo {
+        background-color: #fff66622 !important;
+        border-left: 4px solid #fff666 !important;
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 # 📄 --- Parse Logic ---
 def parse_entries(text):
