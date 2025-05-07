@@ -30,10 +30,6 @@ def save_outputs(text, generate_txt, generate_docx):
         st.error("No valid entries found in the text.")
         return
 
-    if not (generate_txt or generate_docx):
-        st.warning("No output file types selected.")
-        return
-
     files_generated = []
 
     # Generate tab-delimited text file
@@ -86,19 +82,11 @@ with st.expander("How to use this app"):
     ```
     """)
 
-# Input and Clear
+# Input area
 st.subheader("Step 1: Paste your input text below")
+text_input = st.text_area("", height=400, placeholder="Paste your text here...", key="input_text")
 
-col_input, col_clear = st.columns([4, 1])
-with col_input:
-    # Handle session state for input text using key
-    text_input = st.text_area("", height=400, placeholder="Paste your text here...", key="input_text")
-with col_clear:
-    if st.button("🧹 Clear"):
-        # Clear the session state value for input_text, which will clear the text area
-        st.session_state["input_text"] = ""
-
-# Real-time extraction with auto-clear
+# Real-time extraction and display
 if text_input.strip():
     entries = parse_entries(text_input)
     if entries:
@@ -113,19 +101,32 @@ if text_input.strip():
 else:
     st.session_state.pop("extracted_display", None)
 
-# Output format selection
-st.subheader("Step 2: Choose Output Format")
-col1, col2 = st.columns(2)
-generate_txt = col1.checkbox("Generate Tab-Delimited .txt", value=True)
-generate_docx = col2.checkbox("Generate .docx", value=False)
-
-# File generation section
-st.subheader("Step 3: Generate and Download Files")
+# Download buttons for tab-delimited and docx files
 if text_input.strip():
     entries = parse_entries(text_input)
     if entries:
-        save_outputs(text_input, generate_txt, generate_docx)
-    else:
-        st.info("Please enter valid input above to enable downloads.")
+        st.subheader("Step 2: Generate and Download Files")
+        st.download_button(
+            label="⬇ Download Tab-Delimited .txt",
+            data="\n".join([f"{src}\t{trans}\t{ctx}" for src, trans, ctx in entries]).encode('utf-8'),
+            file_name="output_tab_delimited.txt",
+            mime="text/plain"
+        )
+        st.download_button(
+            label="⬇ Download .docx",
+            data=generate_docx(entries),
+            file_name="translations.docx",
+            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
 else:
-    st.info("No input detected. Paste something above first.")
+    st.info("Please paste valid text above to enable downloads.")
+
+# Helper function to generate DOCX
+def generate_docx(entries):
+    doc = Document()
+    for _, trans, _ in entries:
+        doc.add_paragraph(trans)
+    doc_io = io.BytesIO()
+    doc.save(doc_io)
+    doc_io.seek(0)
+    return doc_io
