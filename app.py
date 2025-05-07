@@ -44,3 +44,52 @@ with st.expander("🛈 How to use this app"):
 
 ### ✂️ Input Format:
 Each translation entry must follow this format:
+1
+Source sentence
+Context sentence
+Translated sentence
+Repeat this pattern for multiple entries.
+
+### ✅ Steps:
+1. Paste the copied translation text into the box below.
+2. The app will automatically extract the translations.
+3. You can download the translations in `.txt` or `.docx` format.
+    """)
+
+# Step 1: Input area
+st.subheader("Step 1: Paste your input text below")
+text_input = st.text_area("Paste the formatted text from TTM here:", height=400, placeholder="1\nHello\nGreeting\nBonjour\n...")
+
+# Step 2: Extract translations
+if text_input.strip():
+    entries = parse_entries(text_input)
+    if entries:
+        translations = "\n".join(trans for _, trans, _ in entries)
+        st.subheader("Step 2: Extracted Translations")
+        st.text_area("You can copy this manually if needed:", 
+                     value=translations, 
+                     height=100, 
+                     key="extracted_display")
+    else:
+        st.info("No valid entries detected.")
+else:
+    st.session_state.pop("extracted_display", None)
+
+# Step 3: Download buttons
+if text_input.strip() and entries:
+    st.subheader("Step 3: Download Your Files")
+    st.download_button(
+        label="⬇ Download Tab-Delimited .txt",
+        data="\n".join([f"{src}\t{trans}\t{ctx}" for src, trans, ctx in entries]).encode('utf-8'),
+        file_name="output_tab_delimited.txt",
+        mime="text/plain"
+    )
+    docx_data = generate_docx(entries)
+    st.download_button(
+        label="⬇ Download .docx (Translations Only)",
+        data=docx_data,
+        file_name="translations.docx",
+        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+else:
+    st.info("Please paste valid input text to enable downloads.")
