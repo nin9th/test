@@ -34,6 +34,13 @@ def parse_entries(text):
     return entries
 
 # --- UI Begins ---
+
+st.set_page_config(
+    page_title="Moon Prism Power, Paste and Go!",
+    page_icon="🌙",
+    layout="centered"
+)
+
 st.markdown("<h1 style='color:#ff2e51;'>🌙 Moon Prism Power, Paste and Go!</h1>", unsafe_allow_html=True)
 st.caption("Extract translations from formatted text and download them easily.")
 
