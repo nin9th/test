@@ -28,15 +28,26 @@ st.markdown("""
             border: 1px solid #d260ff !important;
         }
 
-        .stDownloadButton button, .stButton button {
+        .stDownloadButton button {
             background-color: #fff666 !important;
             color: #000 !important;
             border-radius: 10px;
             border: 2px solid #d260ff;
         }
 
+        .stButton button {
+            background-color: transparent !important;
+            color: #000 !important;
+            border: 2px solid #d260ff;
+            border-radius: 10px;
+        }
+
         .stCheckbox > label, .stCheckbox span {
             color: #5158ff !important;
+        }
+
+        input[type="checkbox"] {
+            accent-color: #ffb3df !important;
         }
 
         .css-1offfwp {
@@ -109,10 +120,11 @@ with st.expander("📘 How to use this app"):
         ```
     """)
 
-# Input
-text_input = st.text_area("Paste your text below:", height=300, placeholder="1\nHello\nGreeting\nBonjour\n...")
+# Input (now hidden behind expander only)
+with st.expander("📥 Paste your text below"):
+    text_input = st.text_area("", height=300, placeholder="1\nHello\nGreeting\nBonjour\n...")
 
-if text_input:
+if 'text_input' in locals() and text_input:
     entries = parse_entries(text_input)
 
     if entries:
