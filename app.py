@@ -12,7 +12,7 @@ def generate_docx(entries):
     doc_io.seek(0)
     return doc_io
 
-# Function to parse entries from text input
+# Parse entries from the pasted input
 def parse_entries(text):
     lines = [line.strip() for line in text.strip().splitlines()]
     entries = []
@@ -33,58 +33,14 @@ def parse_entries(text):
             i += 1
     return entries
 
-# Streamlit app layout
-st.title("Moon Prism Power, Paste and Go! 🌙")
+# --- UI Begins ---
+st.title("🌙 Moon Prism Power, Paste and Go!")
+st.caption("Extract translations from formatted text and download them easily.")
 
 # Help section
-with st.expander("How to use this app"):
+with st.expander("🛈 How to use this app"):
     st.markdown("""
-    Paste the text copied from Translation Task Manager (TTM).  
-    Each entry must follow this format:  
-    ```
-    {Segment No.}
-    {Source}
-    {Context}
-    {Translation}
-    ```
-    """)
+**This app helps you extract translations and download them in TXT or DOCX format.**
 
-# Input area
-st.subheader("Step 1: Paste your input text below")
-text_input = st.text_area("", height=400, placeholder="Paste your text here...", key="input_text")
-
-# Real-time extraction and display
-if text_input.strip():
-    entries = parse_entries(text_input)
-    if entries:
-        translations = "\n".join(trans for _, trans, _ in entries)
-        st.subheader("Extracted Translations")
-        st.text_area("Automatically extracted (for manual copy):", 
-                     value=translations, 
-                     height=100, 
-                     key="extracted_display")
-    else:
-        st.info("No valid entries detected.")
-else:
-    st.session_state.pop("extracted_display", None)
-
-# Download buttons for tab-delimited and docx files
-if text_input.strip():
-    entries = parse_entries(text_input)
-    if entries:
-        st.subheader("Step 2: Generate and Download Files")
-        st.download_button(
-            label="⬇ Download Tab-Delimited .txt",
-            data="\n".join([f"{src}\t{trans}\t{ctx}" for src, trans, ctx in entries]).encode('utf-8'),
-            file_name="output_tab_delimited.txt",
-            mime="text/plain"
-        )
-        docx_data = generate_docx(entries)
-        st.download_button(
-            label="⬇ Download .docx",
-            data=docx_data,
-            file_name="translations.docx",
-            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        )
-else:
-    st.info("Please paste valid text above to enable downloads.")
+### ✂️ Input Format:
+Each translation entry must follow this format:
