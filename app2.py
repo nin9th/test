@@ -12,24 +12,39 @@ st.set_page_config(
 # Inject CSS for custom color theme
 st.markdown("""
     <style>
-        body {
+        html, body, [class*="st-"] {
             background-color: #ffffff;
-        }
-        .stApp {
-            background-color: #ffffff;
-        }
-        h1, h2, h3, .stMarkdown, .stTextInput, .stTextArea, .stButton, .stCheckbox {
             color: #5158ff;
+            font-family: "Arial", sans-serif;
         }
-        .css-1cpxqw2, .css-1d391kg {
-            background-color: #fff666 !important;
+
+        h1, h2, h3, .stMarkdown, label, .css-18ni7ap {
+            color: #5158ff !important;
+        }
+
+        .stTextArea textarea, .stTextInput input {
+            background-color: #fffafc !important;
             color: #000000 !important;
+            border: 1px solid #d260ff !important;
+        }
+
+        .stDownloadButton button, .stButton button {
+            background-color: #fff666 !important;
+            color: #000 !important;
             border-radius: 10px;
             border: 2px solid #d260ff;
         }
-        .stTextArea textarea {
-            background-color: #fffafc;
-            border: 1px solid #d260ff;
+
+        .stCheckbox > label {
+            color: #5158ff !important;
+        }
+
+        .css-1offfwp {
+            color: #ff2e51 !important;
+        }
+
+        .stRadio label {
+            color: #d260ff !important;
         }
     </style>
 """, unsafe_allow_html=True)
