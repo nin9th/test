@@ -82,6 +82,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+st.markdown("<h1 style='color:#ff2e51;'>🌙 Moon Prism Power, Paste and Go!</h1>", unsafe_allow_html=True)
+
 
 # 📄 --- Parse Logic ---
 def parse_entries(text):
