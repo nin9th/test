@@ -5,7 +5,7 @@ import io
 # Page config with bright theme colors
 st.set_page_config(
     page_title="Moon Prism Power, Paste and Go!",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="auto"
 )
 
@@ -15,7 +15,7 @@ st.markdown("""
         html, body, [class*="st-"] {
             background-color: #ffffff;
             color: #5158ff;
-            font-family: "Arial", sans-serif;
+            font-family: "Inter", sans-serif;
         }
 
         h1, h2, h3, .stMarkdown, label, .css-18ni7ap {
@@ -35,16 +35,12 @@ st.markdown("""
             border: 2px solid #d260ff;
         }
 
-        .stCheckbox > label {
+        .stCheckbox > label, .stCheckbox span {
             color: #5158ff !important;
         }
 
         .css-1offfwp {
             color: #ff2e51 !important;
-        }
-
-        .stRadio label {
-            color: #d260ff !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -111,27 +107,25 @@ with st.expander("📘 How to use this app"):
         {Context}
         {Translation}
         ```
-        Or upload a `.txt` file with the same format.
     """)
 
 # Input
-input_method = st.radio("Choose your input method:", ["Paste text", "Upload file"], horizontal=True)
-
-text_input = ""
-if input_method == "Paste text":
-    text_input = st.text_area("Paste your text below:", height=300, placeholder="1\nHello\nGreeting\nBonjour\n...")
-else:
-    uploaded_file = st.file_uploader("Upload your text file (.txt)", type=["txt"])
-    if uploaded_file:
-        text_input = uploaded_file.read().decode("utf-8")
+text_input = st.text_area("Paste your text below:", height=300, placeholder="1\nHello\nGreeting\nBonjour\n...")
 
 if text_input:
     entries = parse_entries(text_input)
 
     if entries:
-        st.subheader("📝 Translations (for copy-paste):")
-        translations_only = "\n".join(trans for _, trans, _ in entries)
-        st.text_area("Translations", value=translations_only, height=200)
+        st.subheader("✂️ Translation Preview")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("**Input**")
+            for src, _, ctx in entries:
+                st.text(f"{src}\n({ctx})")
+        with col2:
+            st.markdown("**Translation**")
+            translations_only = "\n".join(trans for _, trans, _ in entries)
+            st.text_area("", value=translations_only, height=300)
 
         # Output options
         st.subheader("💾 Download Options")
