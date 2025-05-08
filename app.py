@@ -62,13 +62,12 @@ with st.expander("ℹ️ How to use this app"):
 
 ### ✂️ Input Format:
 Each translation entry must follow this format:
-<div style="line-height:1.0;">
+<div style="line-height:1.5;">
 1<br>
 Source sentence<br>
 Context sentence<br>
 Translated sentence
 </div>
-Repeat this pattern for multiple entries.
 
 ### ✅ Steps:
 1. Paste the copied translation text into the box below.
