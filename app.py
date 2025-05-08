@@ -62,19 +62,19 @@ with st.expander("ℹ️ How to use this app"):
 
 ### ✂️ Input Format:
 Each translation entry must follow this format:
-
+<div style="line-height:1.0;">
 1<br>
 Source sentence<br>
 Context sentence<br>
 Translated sentence<br>
-
+</div>
 Repeat this pattern for multiple entries.
 
 ### ✅ Steps:
 1. Paste the copied translation text into the box below.
 2. The app will automatically extract the translations.
 3. You can download the translations in `.txt` or `.docx` format.
-    """)
+    """, unsafe_allow_html=True)
 
 # Step 1: Input area
 st.subheader("Step 1: Paste your input text below")
