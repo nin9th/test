@@ -62,7 +62,7 @@ with st.expander("ℹ️ How to use this app"):
 
 ### ✂️ Input Format:
 Each translation entry must follow this format:
-<div style="line-height:1.5; font-style: italic">
+<div style="line-height:1.5; font-style: italic; margin-left: 2em;">
 1<br>
 Source sentence<br>
 Context sentence<br>
