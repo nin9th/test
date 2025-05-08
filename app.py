@@ -52,7 +52,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h2 style='color:#ff2e51;'>🌙 Moon Prism Power, Paste and Go!</h2>", unsafe_allow_html=True)
+st.markdown("<h1 style='color:#ff2e51;'>🌙 Moon Prism Power, Paste and Go!</h1>", unsafe_allow_html=True)
 st.caption("Extract translations from formatted text and download them easily.")
 
 # Help section
