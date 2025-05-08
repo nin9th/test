@@ -41,11 +41,22 @@ st.set_page_config(
     layout="centered"
 )
 
+st.markdown("""
+    <style>
+        .main .block-container {
+            max-width: 1400px;
+            margin: auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 st.markdown("<h1 style='color:#ff2e51;'>🌙 Moon Prism Power, Paste and Go!</h1>", unsafe_allow_html=True)
 st.caption("Extract translations from formatted text and download them easily.")
 
 # Help section
-with st.expander("🛈 How to use this app"):
+with st.expander("ℹ️ How to use this app"):
     st.markdown("""
 **This app helps you extract translations and download them in TXT or DOCX format.**
 
