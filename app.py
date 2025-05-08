@@ -66,7 +66,7 @@ Each translation entry must follow this format:
 1<br>
 Source sentence<br>
 Context sentence<br>
-Translated sentence<br>
+Translated sentence
 </div>
 Repeat this pattern for multiple entries.
 
