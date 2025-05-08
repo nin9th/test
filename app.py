@@ -68,7 +68,7 @@ Source sentence<br>
 Context sentence<br>
 Translated sentence
 </div>
-
+\n
 
 ### ✅ Steps:
 1. Paste the copied translation text into the box below.
